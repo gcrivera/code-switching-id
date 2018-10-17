@@ -26,7 +26,7 @@ if __name__ == '__main__':
     if args.train:
         model = classify.fit(X, Y, args.save_path)
     elif args.validate:
-        Y = classify.predict(X, model)
+        Y_pred = classify.predict(X, model)
     elif args.test:
-        Y = classify.predict(X, model)
+        Y_pred = classify.predict(X, model)
 
