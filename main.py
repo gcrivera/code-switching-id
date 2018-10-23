@@ -19,7 +19,7 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
 
-    # TODO: load data (probably within the ifs)
+    X,Y = prepare_data.load('val')
 
     if args.load_path:
         try:
@@ -27,16 +27,19 @@ if __name__ == '__main__':
         except :
             print("Model not found."); exit()
 
-    if args.train:
-        model = classify.fit(X, Y, args.save_path)
-    elif args.validate:
-        Y_pred = classify.predict(X, model)
-        evaluate.evaluate(Y, Y_pred)
-        if args.confusion_matrix:
-            evaluate.confusion_matrix(Y, Y_pred)
-    elif args.test:
-        Y_pred = classify.predict(X, model)
-        evaluate.evaluate(Y, Y_pred)
-        if args.confusion_matrix:
-            evaluate.confusion_matrix(Y, Y_pred)
+    # if args.train:
+    #     X,Y = prepare_data.load('train')
+    #     model = classify.fit(X, Y, args.save_path)
+    # elif args.validate:
+    #     X,Y = prepare_data.load('val')
+    #     Y_pred = classify.predict(X, model)
+    #     evaluate.evaluate(Y, Y_pred)
+    #     if args.confusion_matrix:
+    #         evaluate.confusion_matrix(Y, Y_pred)
+    # elif args.test:
+    #     X,Y = prepare_data.load('test')
+    #     Y_pred = classify.predict(X, model)
+    #     evaluate.evaluate(Y, Y_pred)
+    #     if args.confusion_matrix:
+    #         evaluate.confusion_matrix(Y, Y_pred)
 
