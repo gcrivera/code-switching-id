@@ -1,3 +1,4 @@
+import itertools
 import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics as metrics
@@ -6,15 +7,12 @@ def evaluate(Y, Y_pred):
     # calculate accuracy
     accuracy = metrics.accuracy_score(Y, Y_pred)
     print 'Accuracy:'
-    print '\t' + accuracy
+    print '\t' + str(accuracy)
 
     # calculate weighted F1 Scores
-    f1_scores = metrics.f1_score(Y, Y_pred, labels=[0, 1, 2, 3], average='weighted')
-    print 'Weighted F1 Scores:'
-    print '\tMSA: ' + f1_scores[0]
-    print '\tEGY: ' + f1_scores[1]
-    print '\tEGY-MSA: ' + f1_scores[2]
-    print '\tNon-Arabic: ' + f1_scores[3]
+    f1_score = metrics.f1_score(Y, Y_pred, labels=[0, 1, 2, 3], average='weighted')
+    print 'Weighted F1 Score:'
+    print '\t' + str(f1_score)
 
 
 def confusion_matrix(Y, Y_pred):
@@ -30,7 +28,7 @@ def confusion_matrix(Y, Y_pred):
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)
 
-    fmt = '.2f' if normalize else 'd'
+    fmt = '.2f'
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         plt.text(j, i, format(cm[i, j], fmt),
