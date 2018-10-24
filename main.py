@@ -19,27 +19,25 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
 
-    X,Y = prepare_data.load('val')
-
     if args.load_path:
         try:
             model = joblib.load(args.load_path)
         except :
             print("Model not found."); exit()
 
-    # if args.train:
-    #     X,Y = prepare_data.load('train')
-    #     model = classify.fit(X, Y, args.save_path)
-    # elif args.validate:
-    #     X,Y = prepare_data.load('val')
-    #     Y_pred = classify.predict(X, model)
-    #     evaluate.evaluate(Y, Y_pred)
-    #     if args.confusion_matrix:
-    #         evaluate.confusion_matrix(Y, Y_pred)
-    # elif args.test:
-    #     X,Y = prepare_data.load('test')
-    #     Y_pred = classify.predict(X, model)
-    #     evaluate.evaluate(Y, Y_pred)
-    #     if args.confusion_matrix:
-    #         evaluate.confusion_matrix(Y, Y_pred)
+    if args.train:
+        X,Y = prepare_data.load('train')
+        model = classify.fit(X, Y, args.save_path)
+    elif args.validate:
+        X,Y = prepare_data.load('val')
+        Y_pred = classify.predict(X, model)
+        evaluate.evaluate(Y, Y_pred)
+        if args.confusion_matrix:
+            evaluate.confusion_matrix(Y, Y_pred)
+    elif args.test:
+        X,Y = prepare_data.load('test')
+        Y_pred = classify.predict(X, model)
+        evaluate.evaluate(Y, Y_pred)
+        if args.confusion_matrix:
+            evaluate.confusion_matrix(Y, Y_pred)
 

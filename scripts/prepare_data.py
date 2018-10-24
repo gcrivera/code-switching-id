@@ -10,6 +10,8 @@ import numpy as np
 # g -> 3
 
 def load(dataset):
+    print 'Loading ' + dataset + ' data...'
+
     transcription = open('code-switching-stats-analysis/' + dataset + '_txt/all.txt.bw')
     lines = transcription.readlines()
     transcription.close()
@@ -46,11 +48,10 @@ def load(dataset):
             duration = float(word_alignment[1][1])
             x , sr = librosa.core.load(wav_file_path, sr=16000, mono=True, offset=start, duration=duration, dtype='float')
             X = librosa.feature.mfcc(x, sr, n_fft=512, hop_length=160, n_mfcc=40, fmin=133, fmax=6955)
-            features.append(X)
+            features.append(np.mean(np.array(X), axis=1))
             tags.append(tags_dict[word_tag[1]])
 
     print 'Total missing alignments: ' + str(total_missing)
-    print len(features[0][0])
     return np.array(features),np.array(tags)
 
 
