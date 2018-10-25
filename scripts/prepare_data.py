@@ -68,11 +68,13 @@ def load_word_alignments():
         line = line.rstrip()
         data = line.split(' ')
         if data[0] != curr_file:
+            curr_word_time_list = sorted(curr_word_time_list, key=lambda x: float(x[1][0]))
             alignments[curr_file] = curr_word_time_list
             curr_file = data[0]
             curr_word_time_list = []
         curr_word_time_list.append((data[4], (data[2], data[3])))
 
+    curr_word_time_list = sorted(curr_word_time_list, key=lambda x: float(x[1][0]))
     alignments[curr_file] = curr_word_time_list
 
     return alignments
