@@ -2,12 +2,7 @@ import librosa
 import numpy as np
 
 # Input: waveforms and word alignments
-# Output: [X, Y] where X is MFCC features and Y is the tag 0-3
-
-# m -> 0
-# f -> 1
-# fm -> 2
-# g -> 3
+# Output: dictionary mapping tag -> numpy array of extracted mfcc features
 
 def load(dataset):
     print 'Loading ' + dataset + ' data...'
@@ -17,10 +12,7 @@ def load(dataset):
     transcription.close()
 
     alignments = load_word_alignments()
-    tags_dict = {'m': 0, 'f': 1, 'fm': 2, 'g': 3}
-    features = []
-    tags = []
-    total_missing = 0
+    features = {'m': [], 'f': [], 'fm': [], 'g': []}
 
     for line in lines:
         line = line.rstrip()
@@ -34,8 +26,6 @@ def load(dataset):
         try:
             line_alignments = alignments[wav_file]
         except:
-            total_missing += 1
-            print 'Missing alignment: ' + wav_file
             continue
         for i in range(len(words)):
             word_tag = words[i].split('_')
@@ -46,13 +36,21 @@ def load(dataset):
                 continue
             start = float(utterance_start) + float(word_alignment[1][0])
             duration = float(word_alignment[1][1])
-            x , sr = librosa.core.load(wav_file_path, sr=16000, mono=True, offset=start, duration=duration, dtype='float')
-            X = librosa.feature.mfcc(x, sr, n_fft=512, hop_length=160, n_mfcc=40, fmin=133, fmax=6955)
-            features.append(np.mean(np.array(X), axis=1))
-            tags.append(tags_dict[word_tag[1]])
 
-    print 'Total missing alignments: ' + str(total_missing)
-    return np.array(features),np.array(tags)
+            x , sr = librosa.core.load(wav_file_path, sr=16000, mono=True, offset=start, duration=duration, dtype='float')
+            mfcc = librosa.feature.mfcc(x, sr, n_fft=400, hop_length=160, fmin=133, fmax=6955)
+            width = mfcc.shape[1]
+            if width % 2 == 0:
+                width -= 1
+            mfcc_delta = librosa.feature.delta(mfcc, width=width)
+            mfcc_delta_delta = librosa.feature.delta(mfcc, width=width, order=2)
+
+            X = np.concatenate((mfcc, mfcc_delta, mfcc_delta_delta))
+            if len(features[word_tag[1]]) == 0:
+                features[word_tag[1]] = X
+            features[word_tag[1]] = np.concatenate((features[word_tag[1]], X), axis=1)
+
+    return features
 
 
 def load_word_alignments():
