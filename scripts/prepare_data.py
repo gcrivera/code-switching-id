@@ -1,8 +1,48 @@
 import librosa
 import numpy as np
+import os
 
 # Input: waveforms and word alignments
 # Output: dictionary mapping tag -> numpy array of extracted mfcc features
+
+def load_train():
+    features = {'m': [], 'f': []}
+    msa_path = '/data/sls/qcri/asr/data/vardial/vardial2017/train.vardial2017/wav/MSA/'
+    egy_path = '/data/sls/qcri/asr/data/vardial/vardial2017/train.vardial2017/wav/EGY/'
+
+    for file in os.listdir(msa_path):
+        if file.endswith('.wav'):
+            wav_file = os.path.join(msa_path, file)
+            x , sr = librosa.core.load(wav_file, sr=16000, mono=True, dtype='float')
+            mfcc = librosa.feature.mfcc(x, sr, n_fft=400, hop_length=160, fmin=133, fmax=6955)
+            width = mfcc.shape[1]
+            if width % 2 == 0:
+                width -= 1
+            mfcc_delta = librosa.feature.delta(mfcc, width=width)
+            mfcc_delta_delta = librosa.feature.delta(mfcc, width=width, order=2)
+
+            X = np.concatenate((mfcc, mfcc_delta, mfcc_delta_delta))
+            if len(features['m']) == 0:
+                features['m'] = X
+            features['m'] = np.concatenate((features['m'], X), axis=1)
+
+    for file in os.listdir(egy_path):
+        if file.endswith('.wav'):
+            wav_file = os.path.join(egy_path, file)
+            x , sr = librosa.core.load(wav_file, sr=16000, mono=True, dtype='float')
+            mfcc = librosa.feature.mfcc(x, sr, n_fft=400, hop_length=160, fmin=133, fmax=6955)
+            width = mfcc.shape[1]
+            if width % 2 == 0:
+                width -= 1
+            mfcc_delta = librosa.feature.delta(mfcc, width=width)
+            mfcc_delta_delta = librosa.feature.delta(mfcc, width=width, order=2)
+
+            X = np.concatenate((mfcc, mfcc_delta, mfcc_delta_delta))
+            if len(features['f']) == 0:
+                features['f'] = X
+            features['f'] = np.concatenate((features['f'], X), axis=1)
+
+    return features
 
 def load_test(dataset):
     print 'Loading ' + dataset + ' data...'

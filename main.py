@@ -26,7 +26,7 @@ if __name__ == '__main__':
             print("Model not found."); exit()
 
     if args.train:
-        data = prepare_data.load('train') # TODO: fix
+        data = prepare_data.load_train()
         model = classify.fit(X, args.save_path)
     if args.validate:
         data = prepare_data.load_test('val')
