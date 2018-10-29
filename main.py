@@ -26,16 +26,16 @@ if __name__ == '__main__':
             print("Model not found."); exit()
 
     if args.train:
-        data = prepare_data.load('train')
-        model = classify.fit(X, Y, args.save_path)
+        data = prepare_data.load('train') # TODO: fix
+        model = classify.fit(X, args.save_path)
     if args.validate:
-        data = prepare_data.load('val')
+        data = prepare_data.load_test('val')
         Y_pred = classify.predict(X, model)
         evaluate.evaluate(Y, Y_pred)
         if args.confusion_matrix:
             evaluate.confusion_matrix(Y, Y_pred)
     if args.test:
-        data = prepare_data.load('test')
+        data = prepare_data.load_test('test')
         Y_pred = classify.predict(X, model)
         evaluate.evaluate(Y, Y_pred)
         if args.confusion_matrix:

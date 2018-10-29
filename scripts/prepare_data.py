@@ -4,7 +4,7 @@ import numpy as np
 # Input: waveforms and word alignments
 # Output: dictionary mapping tag -> numpy array of extracted mfcc features
 
-def load(dataset):
+def load_test(dataset):
     print 'Loading ' + dataset + ' data...'
 
     transcription = open('code-switching-stats-analysis/' + dataset + '_txt/all.txt.bw')
