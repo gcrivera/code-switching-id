@@ -3,6 +3,35 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics as metrics
 
+def get_predictions(scores):
+    Y = []
+    Y_pred = []
+
+    msa_msa_probs = scores['m'][0]
+    msa_egy_probs = scores['m'][1]
+    for i in range(len(msa_msa_probs)):
+        Y.append(0)
+        msa_prob = msa_msa_probs[i]
+        egy_prob = msa_egy_probs[i]
+        if msa_prob >= egy_prob:
+            Y_pred.append(0)
+        else:
+            Y_pred.append(1)
+
+    egy_msa_probs = scores['f'][0]
+    egy_egy_probs = scores['f'][1]
+    for i in range(len(egy_msa_probs)):
+        Y.append(1)
+        msa_prob = egy_msa_probs[i]
+        egy_prob = egy_egy_probs[i]
+        if msa_prob > egy_prob:
+            Y_pred.append(0)
+        else:
+            Y_pred.append(1)
+
+    return Y,Y_pred
+
+
 def evaluate(Y, Y_pred):
     # calculate accuracy
     accuracy = metrics.accuracy_score(Y, Y_pred)
