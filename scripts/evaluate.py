@@ -47,7 +47,7 @@ def evaluate(Y, Y_pred):
 def confusion_matrix(Y, Y_pred):
     cm = metrics.confusion_matrix(Y, Y_pred)
     cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    classes = [0, 1, 2, 3]
+    classes = [0, 1]
 
     plt.figure()
     plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
