@@ -42,6 +42,9 @@ def load_train():
                 features['f'] = X
             features['f'] = np.concatenate((features['f'], X), axis=1)
 
+    for key in features.keys():
+        features[key] = np.matrix(features[key]).T
+
     return features
 
 def load_test(dataset):
@@ -89,6 +92,9 @@ def load_test(dataset):
             if len(features[word_tag[1]]) == 0:
                 features[word_tag[1]] = X
             features[word_tag[1]] = np.concatenate((features[word_tag[1]], X), axis=1)
+
+    for key in features.keys():
+        features[key] = np.matrix(features[key]).T
 
     return features
 
