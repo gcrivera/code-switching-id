@@ -15,5 +15,6 @@ def predict(data, model_path):
         egy = joblib.load(model_path + 'egy.joblib')
     except :
         print("Model not found."); exit()
-        
-    return model.predict(X)
+
+    return {  'm': (msa.score_samples(data['m']), egy.score_samples(data['m'])),
+                'f': (msa.score_samples(data['f']), egy.score_samples(data['f']))}

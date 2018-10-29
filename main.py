@@ -24,13 +24,13 @@ if __name__ == '__main__':
         args.load_path = args.save_path
     if args.validate:
         data = prepare_data.load_test('val')
-        Y_pred = classify.predict(data, args.load_path)
+        scores = classify.predict(data, args.load_path)
         evaluate.evaluate(Y, Y_pred)
         if args.confusion_matrix:
             evaluate.confusion_matrix(Y, Y_pred)
     if args.test:
         data = prepare_data.load_test('test')
-        Y_pred = classify.predict(data, args.load_path)
+        scores = classify.predict(data, args.load_path)
         evaluate.evaluate(Y, Y_pred)
         if args.confusion_matrix:
             evaluate.confusion_matrix(Y, Y_pred)
