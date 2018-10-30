@@ -1,6 +1,7 @@
 import librosa
 import numpy as np
 import os
+import tqdm
 
 # Input: waveforms and word alignments
 # Output: dictionary mapping tag -> numpy array of extracted mfcc features
@@ -10,7 +11,8 @@ def load_train():
     msa_path = '/data/sls/qcri/asr/data/vardial/vardial2017/train.vardial2017/wav/MSA/'
     egy_path = '/data/sls/qcri/asr/data/vardial/vardial2017/train.vardial2017/wav/EGY/'
 
-    for file in os.listdir(msa_path):
+    print 'Loading MSA training data...'
+    for file in tqdm(os.listdir(msa_path)):
         if file.endswith('.wav'):
             wav_file = os.path.join(msa_path, file)
             x , sr = librosa.core.load(wav_file, sr=16000, mono=True, dtype='float')
@@ -26,7 +28,8 @@ def load_train():
                 features['m'] = X
             features['m'] = np.concatenate((features['m'], X), axis=1)
 
-    for file in os.listdir(egy_path):
+    print 'Loading EGY training data...'
+    for file in tqdm(os.listdir(egy_path)):
         if file.endswith('.wav'):
             wav_file = os.path.join(egy_path, file)
             x , sr = librosa.core.load(wav_file, sr=16000, mono=True, dtype='float')
