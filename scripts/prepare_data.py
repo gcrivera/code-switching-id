@@ -102,12 +102,18 @@ def load_test(dataset):
             X = np.matrix(X).T
             if len(utterance_features) == 0:
                 utterance_features = X
-            utterance_features = np.concatenate((utterance_features, X))
+            else:
+                utterance_features = np.concatenate((utterance_features, X))
             word_tags.append(word_tag[1])
-            word_split_idx.append(curr_idx+X.shape[0])
             curr_idx += X.shape[0]
+            print X.shape[0]
+            print utterance_features.shape
+            word_split_idx.append(curr_idx)
 
-        # TODO: Figure out if these are right
+        # TODO: Complete adding normalization then split into word segments
+        # Have utterance features in one matrix to do normalization
+        # Have list of tags corresponding in order to a list of indices that break up words in the utterance matrix
+        # Need to normalize then decide on a data structure to hold the data for evaluation
         print utterance_features.shape
         print word_tags
         print word_split_idx
