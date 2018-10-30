@@ -1,7 +1,7 @@
 import librosa
 import numpy as np
 import os
-import tqdm
+from tqdm import tqdm
 
 # Input: waveforms and word alignments
 # Output: dictionary mapping tag -> numpy array of extracted mfcc features
