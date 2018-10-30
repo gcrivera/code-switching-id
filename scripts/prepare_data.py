@@ -24,9 +24,11 @@ def load_train():
             mfcc_delta_delta = librosa.feature.delta(mfcc, width=width, order=2)
 
             X = np.concatenate((mfcc, mfcc_delta, mfcc_delta_delta))
+            X = np.matrix(X).T
+            X = cmvn_slide(X, cmvn='mv')
             if len(features['m']) == 0:
                 features['m'] = X
-            features['m'] = np.concatenate((features['m'], X), axis=1)
+            features['m'] = np.concatenate((features['m'], X))
 
     print 'Loading EGY training data...'
     for file in tqdm(os.listdir(egy_path)):
@@ -41,12 +43,11 @@ def load_train():
             mfcc_delta_delta = librosa.feature.delta(mfcc, width=width, order=2)
 
             X = np.concatenate((mfcc, mfcc_delta, mfcc_delta_delta))
+            X = np.matrix(X).T
+            X = cmvn_slide(X, cmvn='mv')
             if len(features['f']) == 0:
                 features['f'] = X
-            features['f'] = np.concatenate((features['f'], X), axis=1)
-
-    for key in features.keys():
-        features[key] = np.matrix(features[key]).T
+            features['f'] = np.concatenate((features['f'], X))
 
     return features
 
@@ -73,6 +74,12 @@ def load_test(dataset):
             line_alignments = alignments[wav_file]
         except:
             continue
+
+        utterance_features = []
+        word_tags = []
+        word_split_idx = []
+        curr_idx = 0
+        print len(words)
         for i in range(len(words)):
             word_tag = words[i].split('_')
             if len(word_tag) < 2:
@@ -92,9 +99,23 @@ def load_test(dataset):
             mfcc_delta_delta = librosa.feature.delta(mfcc, width=width, order=2)
 
             X = np.concatenate((mfcc, mfcc_delta, mfcc_delta_delta))
-            if len(features[word_tag[1]]) == 0:
-                features[word_tag[1]] = X
-            features[word_tag[1]] = np.concatenate((features[word_tag[1]], X), axis=1)
+            X = np.matrix(X).T
+            if len(utterance_features) == 0:
+                utterance_features = X
+            utterance_features = np.concatenate((utterance_features, X))
+            word_tags.append(word_tag[1])
+            word_split_idx.append(curr_idx+X.shape[0])
+            curr_idx += X.shape[0]
+
+        # TODO: Figure out if these are right
+        print utterance_features.shape
+        print word_tags
+        print word_split_idx
+        exit()
+        utterance_features = cmvn_slide(utterance_features, cmvn='mv')
+        if len(features[word_tag[1]]) == 0:
+            features[word_tag[1]] = X
+        features[word_tag[1]] = np.concatenate((features[word_tag[1]], X), axis=1)
 
     for key in features.keys():
         features[key] = np.matrix(features[key]).T
@@ -125,3 +146,25 @@ def load_word_alignments():
     alignments[curr_file] = curr_word_time_list
 
     return alignments
+
+def cmvn_slide(X, winlen=300, cmvn=False): #feat : (length, dim) 2d matrix
+    max_length = np.shape(X)[0]
+    new_feat = np.empty_like(X)
+    cur = 1
+    leftwin = 0
+    rightwin = winlen/2
+
+    # middle
+    for cur in range(maxlen):
+        cur_slide = feat[cur-leftwin:cur+rightwin,:]
+        mean = np.mean(cur_slide,axis=0)
+        std = np.std(cur_slide,axis=0)
+        if cmvn == 'mv':
+            new_feat[cur,:] = (feat[cur,:]-mean)/std # for cmvn
+        elif cmvn == 'm':
+            new_feat[cur,:] = (feat[cur,:]-mean) # for cmn
+        if leftwin < winlen/2:
+            leftwin += 1
+        elif maxlen-cur < winlen/2:
+            rightwin -= 1
+    return new_feat
