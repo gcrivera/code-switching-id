@@ -28,12 +28,12 @@ if __name__ == '__main__':
         Y,Y_pred = evaluate.get_predictions(scores)
         evaluate.evaluate(Y, Y_pred)
         if args.confusion_matrix:
-            evaluate.confusion_matrix(Y, Y_pred)
+            print evaluate.confusion_matrix(Y, Y_pred)
     if args.test:
         data = prepare_data.load_test('test')
         scores = classify.predict(data, args.load_path)
         Y,Y_pred = evaluate.get_predictions(scores)
         evaluate.evaluate(Y, Y_pred)
         if args.confusion_matrix:
-            evaluate.confusion_matrix(Y, Y_pred)
+            print evaluate.confusion_matrix(Y, Y_pred)
 
