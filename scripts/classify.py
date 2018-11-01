@@ -16,5 +16,5 @@ def predict(data, model_path):
     except :
         print("Model not found."); exit()
 
-    return {  'm': (msa.score_samples(data['m']), egy.score_samples(data['m'])),
-                'f': (msa.score_samples(data['f']), egy.score_samples(data['f']))}
+    return {'m': map(lambda x: (msa.score(x), egy.score(x)), data['m']),
+            'f': map(lambda x: (msa.score(x), egy.score(x)), data['f'])}
