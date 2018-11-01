@@ -25,7 +25,7 @@ def load_train():
 
             X = np.concatenate((mfcc, mfcc_delta, mfcc_delta_delta))
             X = np.matrix(X).T
-            X = cmvn_slide(X, cmvn='mv')
+            X = cmvn_slide(X, cmvn='m')
             if len(features['m']) == 0:
                 features['m'] = X
             else:
@@ -45,7 +45,7 @@ def load_train():
 
             X = np.concatenate((mfcc, mfcc_delta, mfcc_delta_delta))
             X = np.matrix(X).T
-            X = cmvn_slide(X, cmvn='mv')
+            X = cmvn_slide(X, cmvn='m')
             if len(features['f']) == 0:
                 features['f'] = X
             else:
@@ -112,7 +112,7 @@ def load_test(dataset):
         # TODO: Complete adding normalization then split into word segments
         # Have list of tags corresponding in order to a list of indices that break up words in the utterance matrix
         # Need to normalize then decide on a data structure to hold the data for evaluation
-        utterance_features = cmvn_slide(utterance_features, cmvn='mv')
+        utterance_features = cmvn_slide(utterance_features, cmvn='m')
 
         start = 0
         for i in range(len(word_tags)):
