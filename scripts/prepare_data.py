@@ -28,7 +28,8 @@ def load_train():
             X = cmvn_slide(X, cmvn='mv')
             if len(features['m']) == 0:
                 features['m'] = X
-            features['m'] = np.concatenate((features['m'], X))
+            else:
+                features['m'] = np.concatenate((features['m'], X))
 
     print 'Loading EGY training data...'
     for file in tqdm(os.listdir(egy_path)):
@@ -47,7 +48,8 @@ def load_train():
             X = cmvn_slide(X, cmvn='mv')
             if len(features['f']) == 0:
                 features['f'] = X
-            features['f'] = np.concatenate((features['f'], X))
+            else:
+                features['f'] = np.concatenate((features['f'], X))
 
     return features
 
@@ -79,7 +81,6 @@ def load_test(dataset):
         word_tags = []
         word_split_idx = []
         curr_idx = 0
-        print len(words)
         for i in range(len(words)):
             word_tag = words[i].split('_')
             if len(word_tag) < 2:
@@ -106,25 +107,20 @@ def load_test(dataset):
                 utterance_features = np.concatenate((utterance_features, X))
             word_tags.append(word_tag[1])
             curr_idx += X.shape[0]
-            print X.shape[0]
-            print utterance_features.shape
             word_split_idx.append(curr_idx)
 
         # TODO: Complete adding normalization then split into word segments
-        # Have utterance features in one matrix to do normalization
         # Have list of tags corresponding in order to a list of indices that break up words in the utterance matrix
         # Need to normalize then decide on a data structure to hold the data for evaluation
-        print utterance_features.shape
-        print word_tags
-        print word_split_idx
-        exit()
         utterance_features = cmvn_slide(utterance_features, cmvn='mv')
-        if len(features[word_tag[1]]) == 0:
-            features[word_tag[1]] = X
-        features[word_tag[1]] = np.concatenate((features[word_tag[1]], X), axis=1)
 
-    for key in features.keys():
-        features[key] = np.matrix(features[key]).T
+        start = 0
+        for i in range(len(word_tags)):
+            tag = word_tags[i]
+            end = word_split_idx[i]
+            X = utterance_features[start:end]
+            features[tag].append(X)
+            start = end
 
     return features
 
@@ -153,24 +149,23 @@ def load_word_alignments():
 
     return alignments
 
-def cmvn_slide(X, winlen=300, cmvn=False): #feat : (length, dim) 2d matrix
+def cmvn_slide(X, win_len=300, cmvn=False):
     max_length = np.shape(X)[0]
     new_feat = np.empty_like(X)
     cur = 1
-    leftwin = 0
-    rightwin = winlen/2
+    left_win = 0
+    right_win = win_len/2
 
-    # middle
-    for cur in range(maxlen):
-        cur_slide = feat[cur-leftwin:cur+rightwin,:]
+    for cur in range(max_length):
+        cur_slide = X[cur-left_win:cur+right_win,:]
         mean = np.mean(cur_slide,axis=0)
         std = np.std(cur_slide,axis=0)
         if cmvn == 'mv':
-            new_feat[cur,:] = (feat[cur,:]-mean)/std # for cmvn
+            new_feat[cur,:] = (X[cur,:]-mean)/std # for cmvn
         elif cmvn == 'm':
-            new_feat[cur,:] = (feat[cur,:]-mean) # for cmn
-        if leftwin < winlen/2:
-            leftwin += 1
-        elif maxlen-cur < winlen/2:
-            rightwin -= 1
+            new_feat[cur,:] = (X[cur,:]-mean) # for cmn
+        if left_win < win_len/2:
+            left_win += 1
+        elif max_length-cur < win_len/2:
+            right_win -= 1
     return new_feat
