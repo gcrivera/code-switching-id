@@ -13,6 +13,8 @@ def load_train():
 
     print 'Loading MSA training data...'
     for file in tqdm(os.listdir(msa_path)):
+        if features['m'].shape[0] > 100:
+            break
         if file.endswith('.wav'):
             wav_file = os.path.join(msa_path, file)
             x , sr = librosa.core.load(wav_file, sr=16000, mono=True, dtype='float')
@@ -33,6 +35,8 @@ def load_train():
 
     print 'Loading EGY training data...'
     for file in tqdm(os.listdir(egy_path)):
+        if features['f'].shape[0] > 100:
+            break
         if file.endswith('.wav'):
             wav_file = os.path.join(egy_path, file)
             x , sr = librosa.core.load(wav_file, sr=16000, mono=True, dtype='float')
