@@ -58,5 +58,26 @@ def load_train():
     np.save(egy_features, features['f'])
     return
 
+def cmvn_slide(X, win_len=300, cmvn=False):
+    max_length = np.shape(X)[0]
+    new_feat = np.empty_like(X)
+    cur = 1
+    left_win = 0
+    right_win = win_len/2
+
+    for cur in range(max_length):
+        cur_slide = X[cur-left_win:cur+right_win,:]
+        mean = np.mean(cur_slide,axis=0)
+        std = np.std(cur_slide,axis=0)
+        if cmvn == 'mv':
+            new_feat[cur,:] = (X[cur,:]-mean)/std # for cmvn
+        elif cmvn == 'm':
+            new_feat[cur,:] = (X[cur,:]-mean) # for cmn
+        if left_win < win_len/2:
+            left_win += 1
+        elif max_length-cur < win_len/2:
+            right_win -= 1
+    return new_feat
+
 if __name__ == '__main__':
     load_train()
