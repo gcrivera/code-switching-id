@@ -7,23 +7,21 @@ def get_predictions(scores):
     Y = []
     Y_pred = []
 
-    msa_msa_probs = scores['m'][0]
-    msa_egy_probs = scores['m'][1]
-    for i in range(len(msa_msa_probs)):
+    msa_probs = scores['m']
+    for i in range(len(msa_probs)):
         Y.append(0)
-        msa_prob = msa_msa_probs[i]
-        egy_prob = msa_egy_probs[i]
+        msa_prob = msa_probs[i][0]
+        egy_prob = msa_probs[i][1]
         if msa_prob >= egy_prob:
             Y_pred.append(0)
         else:
             Y_pred.append(1)
 
-    egy_msa_probs = scores['f'][0]
-    egy_egy_probs = scores['f'][1]
-    for i in range(len(egy_msa_probs)):
+    egy_probs = scores['f']
+    for i in range(len(egy_probs)):
         Y.append(1)
-        msa_prob = egy_msa_probs[i]
-        egy_prob = egy_egy_probs[i]
+        msa_prob = egy_probs[i][0]
+        egy_prob = egy_probs[i][1]
         if msa_prob > egy_prob:
             Y_pred.append(0)
         else:
@@ -33,13 +31,15 @@ def get_predictions(scores):
 
 
 def evaluate(Y, Y_pred):
+    print len(Y)
+    print len(Y_pred)
     # calculate accuracy
     accuracy = metrics.accuracy_score(Y, Y_pred)
     print 'Accuracy:'
     print '\t' + str(accuracy)
 
     # calculate weighted F1 Scores
-    f1_score = metrics.f1_score(Y, Y_pred, labels=[0, 1, 2, 3], average='weighted')
+    f1_score = metrics.f1_score(Y, Y_pred, labels=[0, 1], average='weighted')
     print 'Weighted F1 Score:'
     print '\t' + str(f1_score)
 

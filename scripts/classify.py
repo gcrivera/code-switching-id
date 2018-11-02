@@ -15,6 +15,6 @@ def predict(data, model_path):
         egy = joblib.load(model_path + 'egy.joblib')
     except :
         print("Model not found."); exit()
-
+        
     return {'m': map(lambda x: (msa.score(x), egy.score(x)), data['m']),
             'f': map(lambda x: (msa.score(x), egy.score(x)), data['f'])}
