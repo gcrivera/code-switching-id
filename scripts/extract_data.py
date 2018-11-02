@@ -52,8 +52,8 @@ def load_train():
             if len(features['f']) > 1000:
                 break
 
-    msa_features = open('../data/msa.npy')
-    egy_features = open('../data/egy.npy')
+    msa_features = open('../data/msa.npy', w+)
+    egy_features = open('../data/egy.npy', w+)
     np.save(msa_features, features['m'])
     np.save(egy_features, features['f'])
     return
