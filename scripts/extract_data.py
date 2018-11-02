@@ -27,8 +27,6 @@ def load_train():
                 features['m'] = X
             else:
                 features['m'] = np.concatenate((features['m'], X))
-            if len(features['m']) > 1000:
-                break
 
     print 'Loading EGY training data...'
     for file in tqdm(os.listdir(egy_path)):
@@ -49,8 +47,6 @@ def load_train():
                 features['f'] = X
             else:
                 features['f'] = np.concatenate((features['f'], X))
-            if len(features['f']) > 1000:
-                break
 
     msa_features = open('../data/msa.npy', 'w+')
     egy_features = open('../data/egy.npy', 'w+')
