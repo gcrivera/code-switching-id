@@ -19,7 +19,7 @@ args = parser.parse_args()
 if __name__ == '__main__':
 
     if args.train:
-        data = prepare_data.load_train()
+        data = prepare_data.load_train_file()
         classify.fit(data, args.save_path)
         args.load_path = args.save_path
     if args.validate:

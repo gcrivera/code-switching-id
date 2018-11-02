@@ -6,6 +6,11 @@ from tqdm import tqdm
 # Input: waveforms and word alignments
 # Output: dictionary mapping tag -> numpy array of extracted mfcc features
 
+def load_train_file():
+    msa_features = np.load('../data/msa.npy')
+    egy_features = np.load('../data/egy.npy')
+    return {'m': msa_features, 'f': egy_features}
+
 def load_train():
     features = {'m': [], 'f': []}
     msa_path = '/data/sls/qcri/asr/data/vardial/vardial2017/train.vardial2017/wav/MSA/'
