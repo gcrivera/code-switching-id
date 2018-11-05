@@ -4,7 +4,7 @@ from sklearn.mixture import GaussianMixture
 
 def fit_ubm(data, save_path):
     print 'Generating UBM...'
-    ubm = GaussianMixture(64, covariance_type='diag', init_params='random', warm_start=true, max_iter=12, verbose=1).fit(data['m'])
+    ubm = GaussianMixture(64, covariance_type='diag', init_params='random', warm_start=True, max_iter=12, verbose=1).fit(data['m'])
     joblib.dump(ubm, save_path + 'ubm.joblib')
     return ubm
 
