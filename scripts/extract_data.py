@@ -33,7 +33,7 @@ def load_train():
         if file.endswith('.wav'):
             wav_file = os.path.join(egy_path, file)
             x , sr = librosa.core.load(wav_file, sr=16000, mono=True, dtype='float')
-            mfcc = librosa.feature.mfcc(x, sr, n_fft=400, hop_length=160, fmin=133, fmax=6955)
+            mfcc = librosa.feature.mfcc(x, sr, n_mfcc=13, n_fft=400, hop_length=160, fmin=133, fmax=6955)
             width = mfcc.shape[1]
             if width % 2 == 0:
                 width -= 1
