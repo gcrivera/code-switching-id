@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.base import clone
 from sklearn.externals import joblib
 from sklearn.mixture import GaussianMixture
 
@@ -10,15 +11,10 @@ def fit_ubm(data, save_path):
     return ubm
 
 def fit_adap(data, ubm, save_path):
-    print 'UBM params'
-    print ubm.get_params()
     ubm.set_params(max_iter=14)
-    print 'PARAMS 2'
-    print ubm.get_params()
-    exit()
     print 'Generating GMMs...'
-    msa = ubm.fit(data['m'])
-    egy = ubm.fit(data['f'])
+    msa = clone(ubm).fit(data['m'])
+    egy = clone(ubm).fit(data['f'])
     joblib.dump(msa, save_path + 'msa.joblib')
     joblib.dump(egy, save_path + 'egy.joblib')
 
