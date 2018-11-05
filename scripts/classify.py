@@ -4,17 +4,17 @@ from sklearn.mixture import GaussianMixture
 
 def fit_ubm(data, save_path):
     print 'Generating UBM...'
-    ubm = GaussianMixture(64, covariance_type='diag', init_params='random', warm_start=True, max_iter=12, verbose=1).fit(data['m'])
+    ubm = GaussianMixture(64, covariance_type='diag', init_params='random', warm_start=True, max_iter=12, verbose=1).fit(data['m'] + data['f'])
     joblib.dump(ubm, save_path + 'ubm.joblib')
     return ubm
 
 def fit_adap(data, ubm, save_path):
     print 'UBM means'
-    print ubm._means
+    print ubm.means_
     print 'Generating GMMs...'
     msa = ubm.set_params(max_iter=14).fit(data['m'])
     print 'UBM means (if changed then kill process bc ubm object has been altered)'
-    print ubm._means
+    print ubm.means_
     egy = ubm.set_params(max_iter=14).fit(data['f'])
     joblib.dump(msa, save_path + 'msa.joblib')
     joblib.dump(egy, save_path + 'egy.joblib')
