@@ -18,6 +18,11 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
 
+    if args.train_ubm:
+        data = prepare_data.load_train_file()
+        ubm = classify.fit_ubm(data, args.save_path)
+        classify.fit_adap(data, ubm, args.save_path)
+        args.load_path = args.save_path
     if args.train:
         data = prepare_data.load_train_file()
         classify.fit(data, args.save_path)
@@ -28,12 +33,12 @@ if __name__ == '__main__':
         Y,Y_pred = evaluate.get_predictions(scores)
         evaluate.evaluate(Y, Y_pred)
         if args.confusion_matrix:
-            print evaluate.confusion_matrix(Y, Y_pred)
+            evaluate.confusion_matrix(Y, Y_pred)
     if args.test:
         data = prepare_data.load_test('test')
         scores = classify.predict(data, args.load_path)
         Y,Y_pred = evaluate.get_predictions(scores)
         evaluate.evaluate(Y, Y_pred)
         if args.confusion_matrix:
-            print evaluate.confusion_matrix(Y, Y_pred)
+            evaluate.confusion_matrix(Y, Y_pred)
 

@@ -114,9 +114,6 @@ def load_test(dataset):
             curr_idx += X.shape[0]
             word_split_idx.append(curr_idx)
 
-        # TODO: Complete adding normalization then split into word segments
-        # Have list of tags corresponding in order to a list of indices that break up words in the utterance matrix
-        # Need to normalize then decide on a data structure to hold the data for evaluation
         utterance_features = cmvn_slide(utterance_features, cmvn='m')
 
         start = 0

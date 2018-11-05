@@ -7,22 +7,22 @@ def get_predictions(scores):
     Y = []
     Y_pred = []
 
-    msa_probs = scores['m']
-    for i in range(len(msa_probs)):
+    msa_bics = scores['m']
+    for i in range(len(msa_bics)):
         Y.append(0)
-        msa_prob = msa_probs[i][0]
-        egy_prob = msa_probs[i][1]
-        if msa_prob >= egy_prob:
+        msa_bic = msa_bics[i][0]
+        egy_bic = msa_bics[i][1]
+        if msa_bic <= egy_bic:
             Y_pred.append(0)
         else:
             Y_pred.append(1)
 
-    egy_probs = scores['f']
-    for i in range(len(egy_probs)):
+    egy_bics = scores['f']
+    for i in range(len(egy_bics)):
         Y.append(1)
-        msa_prob = egy_probs[i][0]
-        egy_prob = egy_probs[i][1]
-        if msa_prob > egy_prob:
+        msa_bic = egy_bics[i][0]
+        egy_bic = egy_bics[i][1]
+        if msa_bic < egy_bic:
             Y_pred.append(0)
         else:
             Y_pred.append(1)
@@ -31,8 +31,6 @@ def get_predictions(scores):
 
 
 def evaluate(Y, Y_pred):
-    print len(Y)
-    print len(Y_pred)
     # calculate accuracy
     accuracy = metrics.accuracy_score(Y, Y_pred)
     print 'Accuracy:'
@@ -47,7 +45,6 @@ def evaluate(Y, Y_pred):
 def confusion_matrix(Y, Y_pred):
     cm = metrics.confusion_matrix(Y, Y_pred)
     cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    return cm
     # classes = [0, 1]
     #
     # plt.figure()
