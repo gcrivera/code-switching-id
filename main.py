@@ -28,6 +28,20 @@ if __name__ == '__main__':
         data = prepare_data.load_train_file()
         classify.fit(data, args.save_path)
         args.load_path = args.save_path
+    if args.validate_ubm:
+        data = prepare_data.load_test('val')
+        scores = classify.predict_ubm(data, args.load_path)
+        Y,Y_pred = evaluate.get_predictions(scores)
+        evaluate.evaluate(Y, Y_pred)
+        if args.confusion_matrix:
+            evaluate.confusion_matrix(Y, Y_pred)
+    if args.test_ubm:
+        data = prepare_data.load_test('test')
+        scores = classify.predict_ubm(data, args.load_path)
+        Y,Y_pred = evaluate.get_predictions(scores)
+        evaluate.evaluate(Y, Y_pred)
+        if args.confusion_matrix:
+            evaluate.confusion_matrix(Y, Y_pred)
     if args.validate:
         data = prepare_data.load_test('val')
         scores = classify.predict(data, args.load_path)

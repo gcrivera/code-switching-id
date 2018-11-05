@@ -5,19 +5,20 @@ from sklearn.mixture import GaussianMixture
 def fit_ubm(data, save_path):
     print 'Generating UBM...'
     all_data = np.concatenate((data['m'], data['f']))
-    print all_data.shape
     ubm = GaussianMixture(64, covariance_type='diag', init_params='random', warm_start=True, max_iter=12, verbose=1).fit(all_data)
     joblib.dump(ubm, save_path + 'ubm.joblib')
     return ubm
 
 def fit_adap(data, ubm, save_path):
-    print 'UBM means'
-    print ubm.means_
+    print 'UBM params'
+    print ubm.get_params()
+    ubm.set_params(max_iter=14)
+    print 'PARAMS 2'
+    print ubm.get_params()
+    exit()
     print 'Generating GMMs...'
-    msa = ubm.set_params(max_iter=14).fit(data['m'])
-    print 'UBM means (if changed then kill process bc ubm object has been altered)'
-    print ubm.means_
-    egy = ubm.set_params(max_iter=14).fit(data['f'])
+    msa = ubm.fit(data['m'])
+    egy = ubm.fit(data['f'])
     joblib.dump(msa, save_path + 'msa.joblib')
     joblib.dump(egy, save_path + 'egy.joblib')
 

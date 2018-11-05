@@ -7,22 +7,22 @@ def get_predictions(scores):
     Y = []
     Y_pred = []
 
-    msa_bics = scores['m']
-    for i in range(len(msa_bics)):
+    msa_lls = scores['m']
+    for i in range(len(msa_lls)):
         Y.append(0)
-        msa_bic = msa_bics[i][0]
-        egy_bic = msa_bics[i][1]
-        if msa_bic <= egy_bic:
+        msa_ll = msa_lls[i][0]
+        egy_ll = msa_lls[i][1]
+        if msa_ll >= egy_ll:
             Y_pred.append(0)
         else:
             Y_pred.append(1)
 
-    egy_bics = scores['f']
-    for i in range(len(egy_bics)):
+    egy_lls = scores['f']
+    for i in range(len(egy_lls)):
         Y.append(1)
-        msa_bic = egy_bics[i][0]
-        egy_bic = egy_bics[i][1]
-        if msa_bic < egy_bic:
+        msa_ll = egy_lls[i][0]
+        egy_ll = egy_lls[i][1]
+        if msa_ll > egy_ll:
             Y_pred.append(0)
         else:
             Y_pred.append(1)
