@@ -6,6 +6,7 @@ from scripts import prepare_data
 parser = argparse.ArgumentParser(description='Baseline Code-switching Classifier')
 
 parser.add_argument('--train', action='store_true', default=False, help='enable train')
+parser.add_argument('--train_ubm', action='store_true', default=False, help='enable train ubm')
 parser.add_argument('--validate', action='store_true', default=False, help='enable validation')
 parser.add_argument('--test', action='store_true', default=False, help='enable test')
 
