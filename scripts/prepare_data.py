@@ -7,8 +7,8 @@ from tqdm import tqdm
 # Output: dictionary mapping tag -> numpy array of extracted mfcc features
 
 def load_train_file():
-    msa_features = np.load('../data/msa.npy')
-    egy_features = np.load('../data/egy.npy')
+    msa_features = np.load('data/msa.npy')
+    egy_features = np.load('data/egy.npy')
     return {'m': msa_features, 'f': egy_features}
 
 def load_train():

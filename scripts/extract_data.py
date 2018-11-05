@@ -13,7 +13,7 @@ def load_train():
         if file.endswith('.wav'):
             wav_file = os.path.join(msa_path, file)
             x , sr = librosa.core.load(wav_file, sr=16000, mono=True, dtype='float')
-            mfcc = librosa.feature.mfcc(x, sr, n_fft=400, hop_length=160, fmin=133, fmax=6955)
+            mfcc = librosa.feature.mfcc(x, sr, n_mfcc=13, n_fft=400, hop_length=160, fmin=133, fmax=6955)
             width = mfcc.shape[1]
             if width % 2 == 0:
                 width -= 1
@@ -48,8 +48,8 @@ def load_train():
             else:
                 features['f'] = np.concatenate((features['f'], X))
 
-    msa_features = open('../data/msa.npy', 'w+')
-    egy_features = open('../data/egy.npy', 'w+')
+    msa_features = open('../data/msa_39.npy', 'w+')
+    egy_features = open('../data/egy_39.npy', 'w+')
     np.save(msa_features, features['m'])
     np.save(egy_features, features['f'])
     return
