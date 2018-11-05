@@ -29,6 +29,17 @@ def fit(data, save_path):
     joblib.dump(egy, save_path + 'egy.joblib')
     return
 
+def predict_ubm(data, model_path):
+    try:
+        ubm = joblib.load(model_path + 'ubm.joblib')
+        msa = joblib.load(model_path + 'msa.joblib')
+        egy = joblib.load(model_path + 'egy.joblib')
+    except :
+        print("Model not found."); exit()
+
+    return {'m': map(lambda x: (msa.score(x) - ubm.score(x), egy.score(x) - ubm.score(x)), data['m']),
+            'f': map(lambda x: (msa.score(x) - ubm.score(x), egy.score(x) - ubm.score(x)), data['f'])}
+
 def predict(data, model_path):
     try:
         msa = joblib.load(model_path + 'msa.joblib')
