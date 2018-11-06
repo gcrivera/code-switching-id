@@ -8,7 +8,9 @@ parser = argparse.ArgumentParser(description='Baseline Code-switching Classifier
 parser.add_argument('--train', action='store_true', default=False, help='enable train')
 parser.add_argument('--train_ubm', action='store_true', default=False, help='enable train ubm')
 parser.add_argument('--validate', action='store_true', default=False, help='enable validation')
+parser.add_argument('--validate_ubm', action='store_true', default=False, help='enable validation ubm')
 parser.add_argument('--test', action='store_true', default=False, help='enable test')
+parser.add_argument('--test_ubm', action='store_true', default=False, help='enable test ubm')
 
 parser.add_argument('--save_path', type=str, default="models/default/", help='Path to dump models to')
 parser.add_argument('--load_path', type=str, help='Path to load model from, must end in .joblib')

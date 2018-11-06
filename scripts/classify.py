@@ -6,13 +6,17 @@ from sklearn.mixture import GaussianMixture
 def fit_ubm(data, save_path):
     print 'Generating UBM...'
     all_data = np.concatenate((data['m'], data['f']))
-    ubm = GaussianMixture(64, covariance_type='diag', init_params='random', warm_start=True, max_iter=12, verbose=1).fit(all_data)
+    ubm = GaussianMixture(128, covariance_type='diag', init_params='random', warm_start=True, max_iter=12, verbose=1).fit(all_data)
     joblib.dump(ubm, save_path + 'ubm.joblib')
     return ubm
 
 def fit_adap(data, ubm, save_path):
     ubm.set_params(max_iter=14)
     print 'Generating GMMs...'
+    print clone(ubm)._means
+    print 'BREAK'
+    print clone(ubm)._means
+    print '^^ The above should be the same'
     msa = clone(ubm).fit(data['m'])
     egy = clone(ubm).fit(data['f'])
     joblib.dump(msa, save_path + 'msa.joblib')
@@ -35,6 +39,13 @@ def predict_ubm(data, model_path):
         egy = joblib.load(model_path + 'egy.joblib')
     except :
         print("Model not found."); exit()
+
+    print 'UBM means'
+    print ubm.means_
+    print 'MSA means'
+    print msa.means_
+    print 'EGY means'
+    print egy.means_
 
     return {'m': map(lambda x: (msa.score(x) - ubm.score(x), egy.score(x) - ubm.score(x)), data['m']),
             'f': map(lambda x: (msa.score(x) - ubm.score(x), egy.score(x) - ubm.score(x)), data['f'])}
