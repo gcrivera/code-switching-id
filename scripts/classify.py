@@ -12,11 +12,6 @@ def fit_ubm(data, save_path):
 
 def fit_adap(data, ubm, save_path):
     ubm.set_params(max_iter=14)
-    print 'Generating GMMs...'
-    print clone(ubm)._means
-    print 'BREAK'
-    print clone(ubm)._means
-    print '^^ The above should be the same'
     msa = clone(ubm).fit(data['m'])
     egy = clone(ubm).fit(data['f'])
     joblib.dump(msa, save_path + 'msa.joblib')
