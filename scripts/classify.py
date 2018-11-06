@@ -11,6 +11,7 @@ def fit_ubm(data, save_path):
     return ubm
 
 def fit_adap(data, ubm, save_path):
+    print 'Generating GMMs...'
     ubm.set_params(max_iter=14)
     msa = clone(ubm).fit(data['m'])
     egy = clone(ubm).fit(data['f'])
