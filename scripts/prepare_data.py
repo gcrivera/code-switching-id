@@ -9,14 +9,14 @@ from tqdm import tqdm
 def load_train_file():
     msa_features = np.load('data/msa.npy')
     egy_features = np.load('data/egy.npy')
-    return {'m': msa_features, 'f': egy_features}
+    return {'f': msa_features, 'm': egy_features}
 
 def load_train():
     features = {'m': [], 'f': []}
     msa_path = '/data/sls/qcri/asr/data/vardial/vardial2017/train.vardial2017/wav/MSA/'
     egy_path = '/data/sls/qcri/asr/data/vardial/vardial2017/train.vardial2017/wav/EGY/'
 
-    print 'Loading MSA training data...'
+    print('Loading MSA training data...')
     for file in tqdm(os.listdir(msa_path)):
         if file.endswith('.wav'):
             wav_file = os.path.join(msa_path, file)
@@ -36,7 +36,7 @@ def load_train():
             else:
                 features['m'] = np.concatenate((features['m'], X))
 
-    print 'Loading EGY training data...'
+    print('Loading EGY training data...')
     for file in tqdm(os.listdir(egy_path)):
         if file.endswith('.wav'):
             wav_file = os.path.join(egy_path, file)
@@ -59,7 +59,7 @@ def load_train():
     return features
 
 def load_test(dataset):
-    print 'Loading ' + dataset + ' data...'
+    print('Loading ' + dataset + ' data...')
 
     transcription = open('code-switching-stats-analysis/' + dataset + '_txt/all.txt.bw')
     lines = transcription.readlines()
@@ -156,7 +156,7 @@ def cmvn_slide(X, win_len=300, cmvn=False):
     new_feat = np.empty_like(X)
     cur = 1
     left_win = 0
-    right_win = win_len/2
+    right_win = int(win_len/2)
 
     for cur in range(max_length):
         cur_slide = X[cur-left_win:cur+right_win,:]
